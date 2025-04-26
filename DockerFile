@@ -1,0 +1,20 @@
+# Dựa trên Node LTS
+FROM node:18
+
+# Tạo thư mục làm việc
+WORKDIR /app
+
+# Copy package.json và package-lock.json nếu có
+COPY package*.json ./
+
+# Cài đặt dependencies
+RUN npm install
+
+# Copy toàn bộ source code
+COPY . .
+
+# Mở port cho hardhat node
+EXPOSE 8545
+
+# Chạy node trên IP 0.0.0.0 để có thể truy cập từ bên ngoài
+CMD ["sh", "-c", "npx hardhat node --hostname 0.0.0.0 & sleep 5 && npx hardhat run scripts/deploy.js --network localhost"]
