@@ -18,3 +18,4 @@ EXPOSE 8545
 
 # Chạy node trên IP 0.0.0.0 để có thể truy cập từ bên ngoài
 CMD ["sh", "-c", "npx hardhat node --hostname 0.0.0.0 & sleep 5 && npx hardhat run scripts/deploy.js --network localhost"]
+# npx hardhat run scripts/deploy.js --network sepolia

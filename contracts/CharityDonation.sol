@@ -10,7 +10,7 @@ contract CharityDonation {
     struct Campaign {
         address creator;
         string title;
-        address tokenAddress; // address(0) = ETH
+        address tokenAddress; 
         uint256 goal;
         uint256 deadline;
         uint256 totalDonated;
@@ -49,7 +49,7 @@ contract CharityDonation {
             totalDonated: 0,
             isClosed: false,
             isNoLimit: _isNoLimit,
-            donors: new address 
+            donors: new address[](0) 
         });
         campaignCount++;
     }
