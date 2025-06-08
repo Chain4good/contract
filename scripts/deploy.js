@@ -1,31 +1,45 @@
 // scripts/deploy.js
+require("dotenv").config();
+const { ethers, network, run } = require("hardhat");
+
 async function main() {
-  const [deployer] = await ethers.getSigners();
-  console.log("Deploying contracts with the account:", deployer.address);
+  try {
+    const lendingPool = process.env.LENDING_POOL_ADDRESS;
+    const platformFeeRecipient = process.env.PLATFORM_FEE_RECIPIENT_ADDRESS;
 
-  const CharityDonation = await ethers.getContractFactory("CharityDonation");
-  const charityDonation = await CharityDonation.deploy();
+    console.log("Deploying contracts...");
+    const CharityDonation = await ethers.getContractFactory("CharityDonation");
+    const charityDonation = await CharityDonation.deploy(
+      lendingPool,
+      platformFeeRecipient
+    );
 
-  console.log(
-    "CharityDonation deployed to:",
-    await charityDonation.getAddress()
-  );
+    console.log("Waiting for deployment confirmations...");
+    // Wait for 5 block confirmations
+    await charityDonation.waitForDeployment();
+    const receipt = await charityDonation.deploymentTransaction().wait(5);
 
-  // Wait for deployment to be mined and get confirmations
-  console.log("Waiting for deployment confirmations...");
-  await charityDonation.waitForDeployment();
+    console.log(
+      `CharityDonation deployed to: ${await charityDonation.getAddress()}`
+    );
 
-  // Get receipt and wait for additional confirmations
-  const deployTxReceipt = await charityDonation.deploymentTransaction().wait(6);
-  console.log(`Deployment confirmed in block: ${deployTxReceipt.blockNumber}`);
+    // Add delay before verification
+    if (network.name !== "localhost" && process.env.ETHERSCAN_API_KEY) {
+      console.log("Waiting 60 seconds before verification...");
+      await new Promise((resolve) => setTimeout(resolve, 60000)); // 60 second delay
 
-  // Verify contract on Etherscan
-  if (network.name !== "localhost") {
-    try {
-      await verify(await charityDonation.getAddress(), []);
-    } catch (error) {
-      console.log("Error verifying contract:", error);
+      try {
+        await verify(await charityDonation.getAddress(), [
+          lendingPool,
+          platformFeeRecipient,
+        ]);
+      } catch (error) {
+        console.log("Verification failed:", error);
+      }
     }
+  } catch (error) {
+    console.error(error);
+    process.exit(1);
   }
 }
 
@@ -38,9 +52,9 @@ async function verify(contractAddress, args) {
     });
   } catch (e) {
     if (e.message.toLowerCase().includes("already verified")) {
-      console.log("Already verified!");
+      console.log("Contract is already verified!");
     } else {
-      console.log(e);
+      console.error("Verification error:", e);
     }
   }
 }

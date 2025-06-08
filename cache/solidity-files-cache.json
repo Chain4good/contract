@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "/home/tommy/Documents/charity/contract/contracts/CharityDonation.sol": {
-      "lastModificationDate": 1748447999038,
-      "contentHash": "bea23e75cdb681f639738af75db0a4a4",
+      "lastModificationDate": 1749313144714,
+      "contentHash": "ca684a4c691e8b2bf232408d798389d2",
       "sourceName": "contracts/CharityDonation.sol",
       "solcConfig": {
         "version": "0.8.28",
@@ -35,7 +35,8 @@
       ],
       "artifacts": [
         "CharityDonation",
-        "IERC20"
+        "IERC20",
+        "ILendingPool"
       ]
     }
   }
