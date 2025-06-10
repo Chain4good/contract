@@ -1,0 +1,12 @@
+console.log("Owner:", ownerAddress)
+const ownerAddress = await contract.owner()
+const [owner] = await ethers.getSigners()
+const contract = await CharityDonation.attach("0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0") // Replace with your contract address
+const CharityDonation = await ethers.getContractFactory("CharityDonation")
+const contract = await CharityDonation.attach("0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0") 
+const CharityDonation = await ethers.getContractFactory("CharityDonation")
+const lendingPool = await contract.lendingPool()
+console.log("Owner:", owner)
+const owner = await contract.owner()
+const contract = await CharityDonation.attach("0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0")
+const CharityDonation = await ethers.getContractFactory("CharityDonation")
